@@ -15,7 +15,9 @@ import {
 const BASE_URL_KEY = "soc.api_base_url";
 const DEFAULT_BASE_URL =
   (import.meta.env["VITE_API_BASE_URL"] as string | undefined)?.trim() ||
-  "http://127.0.0.1:8000";
+  (import.meta.env.PROD
+    ? "https://cybersecurity-incident-triage-backend-2.onrender.com"
+    : "http://127.0.0.1:8000");
 
 export function getApiBaseUrl(): string {
   if (typeof window === "undefined") return DEFAULT_BASE_URL;
