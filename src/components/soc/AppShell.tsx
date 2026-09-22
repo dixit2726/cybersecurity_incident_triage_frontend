@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { useIsMutating, useQuery } from "@tanstack/react-query";
+import { useIsMutating } from "@tanstack/react-query";
 import {
   Activity,
   BookOpenCheck,
@@ -14,8 +14,8 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import type { ReactNode } from "react";
-import { fetchHealth, getApiBaseUrl } from "@/lib/soc/api";
 import { useIncidents } from "@/lib/soc/store";
+import { useBackendHealth } from "@/hooks/useBackendHealth";
 import { StatusDot } from "./primitives";
 
 const NAV = [
@@ -30,26 +30,15 @@ const NAV = [
   { to: "/about", label: "About", icon: Info },
 ] as const;
 
-export function useBackendHealth() {
-  const isAnalyzing = useIsMutating({ mutationKey: ["soc", "triage"] }) > 0;
-  return useQuery({
-    queryKey: ["soc", "health"],
-    queryFn: fetchHealth,
-    refetchInterval: isAnalyzing ? false : 30_000,
-    retry: false,
-    staleTime: 10_000,
-  });
-}
-
 function HealthBadge() {
-  const isAnalyzing = useIsMutating({ mutationKey: ["soc", "triage"] }) > 0;
+  const isBusy = useIsMutating() > 0;
   const { data, isError, isLoading, isFetching } = useBackendHealth();
 
-  if (isAnalyzing) {
+  if (isBusy) {
     return (
       <div className="flex items-center gap-2 rounded-md border border-border bg-surface px-2.5 py-1.5">
         <StatusDot tone="busy" />
-        <span className="mono-xs text-foreground/85">Analysis in progress</span>
+        <span className="mono-xs text-foreground/85">Processing…</span>
       </div>
     );
   }
@@ -71,6 +60,8 @@ function HealthBadge() {
     </div>
   );
 }
+
+
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { active, incidents } = useIncidents();
@@ -131,10 +122,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </div>
               )}
               <HealthBadge />
-              <span className="hidden mono-xs text-muted-foreground lg:inline">
-                {getApiBaseUrl()}
-              </span>
             </div>
+
           </div>
           <nav className="flex gap-1 overflow-x-auto border-t border-border px-2 py-2 md:hidden">
             {NAV.map(({ to, label }) => (

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { MessageSquare, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,8 +28,10 @@ export function IncidentAssistant({ incident }: { incident: StoredIncident }) {
   const [question, setQuestion] = useState("");
   const [exchanges, setExchanges] = useState<Exchange[]>([]);
   const [validation, setValidation] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const ask = useMutation({
+    mutationKey: ["soc", "ask"],
     mutationFn: (q: string) =>
       postIncidentQuestion({
         triage_report: incident.triage_report,
@@ -42,8 +44,10 @@ export function IncidentAssistant({ incident }: { incident: StoredIncident }) {
         ...prev,
       ]);
       setQuestion("");
+      queryClient.setQueryData(["soc", "health"], { status: "healthy" });
     },
   });
+
 
   function submit(value: string) {
     const clean = value.trim();

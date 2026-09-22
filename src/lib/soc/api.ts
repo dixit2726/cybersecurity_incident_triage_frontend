@@ -21,9 +21,43 @@ const DEFAULT_BASE_URL =
 
 export function getApiBaseUrl(): string {
   if (typeof window === "undefined") return DEFAULT_BASE_URL;
-  const stored = window.localStorage.getItem(BASE_URL_KEY);
-  return (stored && stored.trim()) || DEFAULT_BASE_URL;
+  const stored = window.localStorage.getItem(BASE_URL_KEY)?.trim();
+  if (stored) {
+    try {
+      const storedUrl = new URL(stored);
+      if (
+        storedUrl.port === "8080" ||
+        storedUrl.port === window.location.port ||
+        storedUrl.host === window.location.host ||
+        stored.includes(":8080")
+      ) {
+        window.localStorage.removeItem(BASE_URL_KEY);
+      } else {
+        return stored;
+      }
+    } catch {
+      window.localStorage.removeItem(BASE_URL_KEY);
+    }
+  }
+
+  // If accessing via local network IP (e.g. 192.168.x.x), route default backend to same host on port 8000
+  if (
+    DEFAULT_BASE_URL.includes("127.0.0.1:8000") ||
+    DEFAULT_BASE_URL.includes("localhost:8000")
+  ) {
+    if (
+      window.location.hostname &&
+      window.location.hostname !== "localhost" &&
+      window.location.hostname !== "127.0.0.1"
+    ) {
+      return `http://${window.location.hostname}:8000`;
+    }
+  }
+
+  return DEFAULT_BASE_URL;
 }
+
+
 
 export function setApiBaseUrl(url: string): void {
   if (typeof window === "undefined") return;
