@@ -2,6 +2,8 @@ import {
   ApiError,
   type HealthResponse,
   type IncidentAskResponse,
+  type IncidentDetailResponse,
+  type IncidentListResponse,
   type TriageReport,
   type TriageResponse,
 } from "./types";
@@ -215,6 +217,19 @@ export async function postIncidentQuestion(input: {
   return request<IncidentAskResponse>("/api/v1/incident/ask", {
     method: "POST",
     body: JSON.stringify(input),
+  });
+}
+
+export async function fetchIncidents(limit = 20, offset = 0): Promise<IncidentListResponse> {
+  const query = new URLSearchParams({ limit: String(limit), offset: String(offset) });
+  return request<IncidentListResponse>(`/api/v1/incidents?${query.toString()}`, {
+    method: "GET",
+  });
+}
+
+export async function fetchIncident(incidentId: string): Promise<IncidentDetailResponse> {
+  return request<IncidentDetailResponse>(`/api/v1/incidents/${encodeURIComponent(incidentId)}`, {
+    method: "GET",
   });
 }
 

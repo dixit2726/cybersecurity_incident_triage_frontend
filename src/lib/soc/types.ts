@@ -79,6 +79,52 @@ export interface RootResponse {
   status?: string;
 }
 
+export interface DbIncidentSummary {
+  id: string;
+  incident_id?: string | null;
+  created_at?: string | null;
+  severity?: string | null;
+  event_type?: string | null;
+  source_ip?: string | null;
+  destination_ip?: string | null;
+  protocol?: string | null;
+  destination_port?: string | null;
+  analyst_review_required?: boolean;
+}
+
+export interface IncidentListResponse {
+  success?: boolean;
+  total?: number;
+  limit?: number;
+  offset?: number;
+  incidents: DbIncidentSummary[];
+}
+
+export interface IncidentDetailRecord {
+  id: string;
+  incident_id?: string | null;
+  created_at?: string | null;
+  alert_text: string;
+  severity?: string | null;
+  event_type?: string | null;
+  source_ip?: string | null;
+  destination_ip?: string | null;
+  protocol?: string | null;
+  destination_port?: string | null;
+  iocs?: unknown[];
+  threat_intelligence?: unknown[];
+  mitre_results?: unknown[];
+  playbooks?: unknown[];
+  cisa_guidance?: unknown[];
+  triage_report: TriageReport;
+  analyst_review_required?: boolean;
+}
+
+export interface IncidentDetailResponse {
+  success?: boolean;
+  incident: IncidentDetailRecord;
+}
+
 /** A single analysis performed in this browser session. */
 export interface StoredIncident {
   /** Local session key; not a backend identifier. */
