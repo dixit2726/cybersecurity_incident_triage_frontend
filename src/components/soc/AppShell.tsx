@@ -2,14 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useIsMutating } from "@tanstack/react-query";
 import {
   Activity,
-  BookOpenCheck,
-  Crosshair,
-  FileText,
-  History,
   Info,
-  ListChecks,
   Radar,
-  ScrollText,
   Settings2,
   ShieldAlert,
 } from "lucide-react";
@@ -20,12 +14,6 @@ import { StatusDot } from "./primitives";
 
 const NAV = [
   { to: "/", label: "Analyze Alert", icon: Radar },
-  { to: "/history", label: "Incident History", icon: History },
-  { to: "/threat-intelligence", label: "Threat Intelligence", icon: Crosshair },
-  { to: "/mitre", label: "MITRE ATT&CK", icon: ListChecks },
-  { to: "/playbooks", label: "Response Playbooks", icon: BookOpenCheck },
-  { to: "/cisa", label: "CISA Guidance", icon: ScrollText },
-  { to: "/reports", label: "Reports", icon: FileText },
   { to: "/settings", label: "Settings", icon: Settings2 },
   { to: "/about", label: "About", icon: Info },
 ] as const;
