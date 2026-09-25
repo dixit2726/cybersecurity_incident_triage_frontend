@@ -3,8 +3,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Copy, Download, Eraser, FileText, Loader2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { describeError, postTriage } from "@/lib/soc/api";
@@ -17,7 +15,14 @@ import {
   OverviewPanel,
   ResponsePanel,
 } from "./panels";
-import { EmptyState, ErrorPanel, ReviewBanner, SectionCard, SeverityBadge } from "./primitives";
+import {
+  EmptyState,
+  ErrorPanel,
+  ReviewBanner,
+  SectionCard,
+  SeverityBadge,
+  StatusDot,
+} from "./primitives";
 import { IncidentAssistant } from "./IncidentAssistant";
 
 const SAMPLE_ALERT = `ALERT ID: SEC-2026-0925-001
@@ -38,7 +43,6 @@ export function AnalyzeWorkspace() {
   const queryClient = useQueryClient();
   const { active } = useIncidents();
   const [alertText, setAlertText] = useState("");
-  const [enableLive, setEnableLive] = useState(false);
   const [validation, setValidation] = useState<string | null>(null);
 
   const triage = useMutation({
@@ -65,7 +69,7 @@ export function AnalyzeWorkspace() {
       return;
     }
     setValidation(null);
-    triage.mutate({ alert_text: alertText, enable_live: enableLive });
+    triage.mutate({ alert_text: alertText, enable_live: false });
   }
 
   const error = triage.isError ? describeError(triage.error) : null;
@@ -77,16 +81,15 @@ export function AnalyzeWorkspace() {
         title="Analyze Security Alert"
         subtitle="Paste one complete security alert. The AI will automatically extract indicators, enrich with threat intelligence, map to MITRE ATT&CK, and provide response guidance."
         actions={
-          <div className="flex items-center gap-2">
-            <Switch
-              id="live-ti"
-              checked={enableLive}
-              onCheckedChange={setEnableLive}
-              disabled={triage.isPending}
-            />
-            <Label htmlFor="live-ti" className="mono-xs text-muted-foreground cursor-pointer">
-              Live threat intel enrichment
-            </Label>
+          <div
+            className="flex items-center gap-2 rounded-md border border-border bg-surface/80 px-2.5 py-1 select-none"
+            title="Threat intelligence enrichment is enabled and part of the incident triage workflow."
+          >
+            <StatusDot tone="ok" />
+            <span className="mono-xs text-foreground/85">
+              Threat Intelligence:{" "}
+              <span className="font-medium text-ok">Active</span>
+            </span>
           </div>
         }
       >
