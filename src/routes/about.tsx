@@ -1,27 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 import {
+  Activity,
   AlertTriangle,
   ArrowDown,
   ArrowRight,
   BookOpenCheck,
   Bot,
+  BrainCircuit,
   CheckCircle2,
+  Code2,
   Cpu,
   Crosshair,
   Database,
-  FileCode,
+  FileCode2,
+  FileSearch,
   FileText,
+  Fingerprint,
+  Flame,
+  FolderGit2,
+  Globe,
+  HardDrive,
   History,
-  Info,
   Layers,
   ListChecks,
+  Lock,
   Network,
   Radar,
-  ScrollText,
   Server,
-  Settings2,
   Shield,
   ShieldAlert,
+  ShieldCheck,
+  Terminal,
+  Workflow,
+  Zap,
 } from "lucide-react";
 import { SectionCard } from "@/components/soc/primitives";
 
@@ -32,13 +43,13 @@ export const Route = createFileRoute("/about")({
       {
         name: "description",
         content:
-          "Architectural overview and functional guide for the Cybersecurity Incident Triage AI platform.",
+          "AI-powered security alert analysis, threat intelligence correlation, and evidence-based incident triage for SOC analysts.",
       },
       { property: "og:title", content: "About — Cybersecurity Incident Triage AI" },
       {
         property: "og:description",
         content:
-          "Learn how Incident Triage AI parses alerts, retrieves multi-source RAG evidence, and synthesizes incident triage for SOC analysts.",
+          "Operational overview of the Cybersecurity Incident Triage AI architecture, RAG knowledge retrieval, threat intelligence lookups, and SOC analyst workflow.",
       },
     ],
   }),
@@ -47,767 +58,644 @@ export const Route = createFileRoute("/about")({
 
 function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl space-y-6 pb-12">
-      {/* Header */}
-      <div className="border-b border-border/80 pb-4">
-        <div className="flex items-center gap-2">
+    <div className="mx-auto max-w-5xl space-y-8 pb-16">
+      {/* =========================================================================
+          PAGE HEADER
+          ========================================================================= */}
+      <div className="border-b border-border pb-6">
+        <div className="flex items-center gap-2.5">
           <ShieldAlert className="size-6 text-primary" aria-hidden />
-          <h1 className="text-xl font-bold tracking-tight text-foreground">Incident Triage AI</h1>
+          <h1 className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
+            About Cybersecurity Incident Triage AI
+          </h1>
         </div>
-        <p className="mt-1 text-sm font-medium text-primary/90">
-          Evidence-Grounded SOC Incident Analysis
+        <p className="mt-1.5 text-sm font-medium text-primary">
+          AI-powered security alert analysis, threat intelligence correlation, and evidence-based incident triage for SOC analysts.
         </p>
-        <p className="mt-2 text-xs text-muted-foreground">
-          An operational guide to the platform architecture, multi-source RAG retrieval pipeline,
-          threat-intelligence enrichment, and console functionality.
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground sm:text-[0.8125rem]">
+          Cybersecurity Incident Triage AI is an analyst-focused security operations platform designed to transform raw security alerts into structured, contextualized, and actionable incident assessments. The system combines alert parsing, threat intelligence, Retrieval-Augmented Generation (RAG), AI-assisted analysis, and persistent incident records to support faster and more consistent security investigations.
         </p>
       </div>
 
       {/* Advisory Banner */}
       <div className="flex items-start gap-3 rounded-md border border-warn/40 bg-warn/10 p-3.5 text-warn">
         <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden />
-        <div className="space-y-0.5 text-xs leading-relaxed">
-          <span className="font-semibold">Core Operating Principle:</span> AI-generated triage is
-          advisory. Analysts should validate the underlying evidence before taking containment or
-          remediation actions.
-        </div>
+        <p className="text-xs leading-relaxed text-foreground/90">
+          <span className="font-semibold text-warn">Core Operating Principle:</span> AI-generated triage is advisory. Security analysts remain responsible for validating underlying evidence before authorizing containment or remediation actions.
+        </p>
       </div>
 
-      {/* Compact System Workflow Visual Near Top */}
+      {/* =========================================================================
+          SECTION 1 — What is Incident Triage AI?
+          ========================================================================= */}
       <SectionCard
-        title="System Workflow"
-        subtitle="End-to-end evidence collection and AI reasoning pipeline"
+        title="What is Cybersecurity Incident Triage AI?"
+        subtitle="End-to-end processing pipeline transforming unorganized alert telemetry into structured incident assessments"
       >
-        <div className="hidden grid-cols-7 gap-2 lg:grid">
-          {[
-            { step: "1. Alert", desc: "Complete security alert payload", icon: Radar },
-            { step: "2. Parse", desc: "Metadata, IOCs, behavioral cues", icon: FileCode },
-            { step: "3. RAG Retrieval", desc: "MITRE, Playbooks, CISA guidance", icon: Layers },
-            { step: "4. Threat Intel", desc: "Local cache & live enrichment", icon: Crosshair },
-            { step: "5. Evidence", desc: "Assembled Evidence Package", icon: Database },
-            { step: "6. AI Synthesis", desc: "Grounded Gemini reasoning", icon: Bot },
-            { step: "7. Review", desc: "Human SOC determination", icon: CheckCircle2 },
-          ].map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <div
-                key={idx}
-                className="relative flex flex-col rounded-md border border-border bg-surface/60 p-3"
-              >
-                <div className="flex items-center justify-between">
-                  <Icon className="size-4 text-primary" />
-                  {idx < 6 && (
-                    <ArrowRight className="absolute -right-2.5 top-1/2 z-10 size-3 -translate-y-1/2 text-muted-foreground" />
-                  )}
+        <p className="text-xs leading-relaxed text-foreground/85 sm:text-[0.8125rem]">
+          The platform accepts a complete security alert payload and executes a systematic, multi-stage investigation workflow. Each stage extracts facts, enriches context through external feeds and indexed databases, retrieves domain-specific defensive guidance, and produces an evidence-grounded assessment.
+        </p>
+
+        {/* Visual Workflow Diagram */}
+        <div className="mt-5 rounded-md border border-border bg-panel/70 p-4">
+          <p className="label-caps mb-3 text-muted-foreground">Platform Investigation Pipeline</p>
+
+          {/* Desktop / Tablet Flow */}
+          <div className="hidden lg:grid grid-cols-5 gap-2.5">
+            {[
+              { step: "Security Alert", sub: "Raw incoming telemetry", icon: Radar },
+              { step: "Alert Parsing", sub: "Extract fields & headers", icon: FileCode2 },
+              { step: "IOC Extraction", sub: "Identify IPs, URLs, hashes", icon: Fingerprint },
+              { step: "Threat Intel", sub: "Indexed MISP lookups", icon: Crosshair },
+              { step: "RAG Retrieval", sub: "MITRE, CISA, Playbooks", icon: Layers },
+              { step: "Evidence Package", sub: "Consolidated facts", icon: Database },
+              { step: "AI Triage", sub: "Grounded LLM synthesis", icon: Bot },
+              { step: "Reconciliation", sub: "Deterministic validation", icon: ShieldCheck },
+              { step: "Incident Report", sub: "5-tab SOC view", icon: FileText },
+              { step: "Supabase Store", sub: "Persistent audit history", icon: HardDrive },
+            ].map((node, i) => {
+              const Icon = node.icon;
+              return (
+                <div
+                  key={i}
+                  className="flex flex-col justify-between rounded-md border border-border bg-surface/50 p-2.5 text-center relative"
+                >
+                  <div className="flex items-center justify-center mb-1 text-primary">
+                    <Icon className="size-4" />
+                  </div>
+                  <p className="mono-xs font-semibold text-foreground">{node.step}</p>
+                  <p className="text-[0.6875rem] text-muted-foreground truncate">{node.sub}</p>
                 </div>
-                <div className="mt-2 text-xs font-semibold text-foreground">{item.step}</div>
-                <p className="mt-1 text-[0.6875rem] leading-tight text-muted-foreground">
-                  {item.desc}
-                </p>
+              );
+            })}
+          </div>
+
+          {/* Mobile / Vertical Fallback Flow */}
+          <div className="flex flex-col gap-1.5 lg:hidden">
+            {[
+              "Security Alert",
+              "Alert Parsing",
+              "IOC Extraction",
+              "Threat Intelligence Lookup",
+              "RAG Evidence Retrieval",
+              "Evidence Package",
+              "AI Triage",
+              "Deterministic Reconciliation",
+              "Incident Report",
+              "Supabase Persistence",
+            ].map((step, idx, arr) => (
+              <div key={idx} className="flex flex-col items-center">
+                <div className="w-full rounded border border-border bg-surface/60 px-3 py-1.5 text-center mono-xs font-semibold text-foreground/90">
+                  {step}
+                </div>
+                {idx < arr.length - 1 && <ArrowDown className="my-1 size-3 text-muted-foreground" />}
               </div>
-            );
-          })}
+            ))}
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 2 — Why Was It Developed?
+          ========================================================================= */}
+      <SectionCard
+        title="Why This Platform Was Developed"
+        subtitle="Addressing alert fatigue, unstructured logs, and fragmented SOC investigation data"
+      >
+        <blockquote className="rounded-md border-l-2 border-primary bg-surface/40 p-3 text-xs leading-relaxed text-foreground/90 italic">
+          “Security Operations Centers generate a large volume of alerts from endpoints, networks, applications, and security tools. Analysts need to quickly determine what happened, whether an indicator is known, what techniques may be involved, and what response actions should be considered.”
+        </blockquote>
+
+        <p className="mt-4 text-xs leading-relaxed text-foreground/85">
+          The platform was designed to streamline this critical early-triage window:
+        </p>
+
+        <div className="mt-3 grid gap-2.5 sm:grid-cols-2">
+          {[
+            { title: "Reduce Repetitive Manual Investigation", desc: "Automate indicator extraction and multi-source feed lookups so analysts avoid context-switching across external browsers." },
+            { title: "Structure Unorganized Security Alerts", desc: "Normalize heterogeneous alert schemas, syslog lines, and raw JSON into consistent investigation records." },
+            { title: "Extract Important Indicators Automatically", desc: "Identify IPv4 addresses, domains, ports, URLs, and file hashes directly from free-form alert text." },
+            { title: "Correlate with Threat-Intelligence Data", desc: "Instantly cross-reference parsed indicators against authoritative local threat intelligence." },
+            { title: "Retrieve Relevant Cybersecurity Knowledge", desc: "Ground the investigation with authoritative MITRE ATT&CK techniques, response playbooks, and CISA advisories." },
+            { title: "Provide AI-Assisted Incident Analysis", desc: "Generate structured technical assessments, severity justifications, and containment priorities without hallucinations." },
+            { title: "Present Evidence in One Interface", desc: "Consolidate telemetry, detection context, playbook steps, and raw alerts into a unified 5-tab console." },
+            { title: "Maintain Historical Incident Records", desc: "Keep persistent audit trails of analyzed alerts for trend identification and compliance review." },
+          ].map((item, idx) => (
+            <div key={idx} className="rounded-md border border-border bg-surface/40 p-3">
+              <p className="text-xs font-semibold text-primary">{item.title}</p>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
         </div>
 
-        {/* Mobile/Tablet Fallback Workflow */}
-        <div className="flex flex-wrap items-center gap-1.5 text-xs lg:hidden">
+        <p className="mt-3 text-[0.6875rem] text-muted-foreground italic">
+          * Note: This platform is designed to assist and accelerate security analysts, not replace human judgment, contextual familiarity, or organizational decision-making.
+        </p>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 3 — End-to-End Investigation Workflow
+          ========================================================================= */}
+      <SectionCard
+        title="How It Works"
+        subtitle="Seven discrete operational stages executed during automated alert triage"
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {/* 01 */}
+          <div className="rounded-md border border-border bg-panel p-3.5 flex flex-col justify-between">
+            <div>
+              <span className="mono-xs font-bold text-primary">01 — Alert Parsing</span>
+              <p className="mt-1.5 text-xs text-foreground/85 leading-relaxed">
+                The system receives a complete security alert and parses out structured metadata: Alert ID, Timestamp, Alert Type, Event Type, Severity, Source IP, Destination IP, Protocol, Port, URL, File Hash, and behavioral cue sentences.
+              </p>
+            </div>
+          </div>
+
+          {/* 02 */}
+          <div className="rounded-md border border-border bg-panel p-3.5 flex flex-col justify-between">
+            <div>
+              <span className="mono-xs font-bold text-primary">02 — IOC Extraction</span>
+              <p className="mt-1.5 text-xs text-foreground/85 leading-relaxed">
+                Indicators of compromise—including IP addresses, external URLs, host domains, and file hashes—are automatically identified, normalized, and categorized for threat evaluation.
+              </p>
+            </div>
+          </div>
+
+          {/* 03 */}
+          <div className="rounded-md border border-border bg-panel p-3.5 flex flex-col justify-between">
+            <div>
+              <span className="mono-xs font-bold text-primary">03 — Threat Intelligence</span>
+              <p className="mt-1.5 text-xs text-foreground/85 leading-relaxed">
+                Extracted indicators are evaluated against a locally indexed SQLite threat-intelligence database imported from URLhaus, ThreatFox, and MalwareBazaar datasets for rapid, air-gapped lookups.
+              </p>
+            </div>
+          </div>
+
+          {/* 04 */}
+          <div className="rounded-md border border-border bg-panel p-3.5 flex flex-col justify-between">
+            <div>
+              <span className="mono-xs font-bold text-primary">04 — RAG Evidence Retrieval</span>
+              <p className="mt-1.5 text-xs text-foreground/85 leading-relaxed">
+                The RAG pipeline retrieves relevant cybersecurity knowledge from MITRE ATT&CK matrices, official response playbooks, and CISA cybersecurity advisories to provide grounded context.
+              </p>
+            </div>
+          </div>
+
+          {/* 05 */}
+          <div className="rounded-md border border-border bg-panel p-3.5 flex flex-col justify-between">
+            <div>
+              <span className="mono-xs font-bold text-primary">05 — AI Triage</span>
+              <p className="mt-1.5 text-xs text-foreground/85 leading-relaxed">
+                The AI engine synthesizes the parsed alert with retrieved evidence packages to produce a structured triage assessment: incident summary, assessed severity, MITRE tactics, and recommended response steps.
+              </p>
+            </div>
+          </div>
+
+          {/* 06 */}
+          <div className="rounded-md border border-border bg-panel p-3.5 flex flex-col justify-between">
+            <div>
+              <span className="mono-xs font-bold text-primary">06 — Evidence Reconciliation</span>
+              <p className="mt-1.5 text-xs text-foreground/85 leading-relaxed">
+                Deterministic threat-intelligence results (queried IOC, match status, source, threat type) are enforced as authoritative, preventing generative language models from hallucinating or overwriting verified facts.
+              </p>
+            </div>
+          </div>
+
+          {/* 07 */}
+          <div className="rounded-md border border-border bg-panel p-3.5 flex flex-col justify-between sm:col-span-2 lg:col-span-3">
+            <div>
+              <span className="mono-xs font-bold text-primary">07 — Incident Persistence</span>
+              <p className="mt-1.5 text-xs text-foreground/85 leading-relaxed">
+                Every triaged incident is persisted into Supabase PostgreSQL backend records for auditability, while your individual analyst investigations are tracked directly in the User Incident History view.
+              </p>
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 4 — Threat Intelligence Integration
+          ========================================================================= */}
+      <SectionCard
+        title="Threat Intelligence Integration"
+        subtitle="Optimized indexing architecture separating raw source feeds from application-ready lookups"
+      >
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">1. Source Data</span>
+            <h4 className="mt-1 text-xs font-bold text-foreground">CSV Datasets</h4>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              Curated OSINT feeds from URLhaus, ThreatFox, and MalwareBazaar serving as the authoritative threat repository.
+            </p>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">2. Local Storage</span>
+            <h4 className="mt-1 text-xs font-bold text-foreground">SQLite Index</h4>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              Indexed, indexed-searchable local database enabling microsecond queries without latency or rate limits.
+            </p>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">3. Real-time Triage</span>
+            <h4 className="mt-1 text-xs font-bold text-foreground">Triage Engine</h4>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              Queries SQLite for extracted alert indicators during triage, validating against verified match criteria.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-4 rounded-md border border-border/80 bg-panel/60 p-3 text-xs leading-relaxed text-foreground/85">
+          “The CSV files act as the source datasets. The indexing process imports their records into SQLite, where indicators can be queried efficiently during incident analysis. When the source datasets are updated, the SQLite index can be rebuilt to incorporate the updated records.”
+        </div>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 5 — RAG Knowledge Sources
+          ========================================================================= */}
+      <SectionCard
+        title="Security Knowledge Retrieval"
+        subtitle="Multi-domain semantic search over standardized cybersecurity frameworks and playbooks"
+      >
+        <div className="grid gap-3 md:grid-cols-3">
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <div className="flex items-center gap-2">
+              <Shield className="size-4 text-primary" />
+              <h4 className="text-xs font-bold text-foreground">MITRE ATT&CK</h4>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+              Maps alert behavior to standardized tactics, techniques, and procedures (TTPs), enabling consistent classification of adversary behavior across enterprise environments.
+            </p>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <div className="flex items-center gap-2">
+              <BookOpenCheck className="size-4 text-ok" />
+              <h4 className="text-xs font-bold text-foreground">Response Playbooks</h4>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+              Retrieves standard operating procedures and tactical checklists specifically matched to detected incident categories (e.g., malware downloads, brute-force attacks).
+            </p>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <div className="flex items-center gap-2">
+              <Globe className="size-4 text-blue-400" />
+              <h4 className="text-xs font-bold text-foreground">CISA Guidance</h4>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
+              Injects official defensive and detection advisories from the Cybersecurity & Infrastructure Security Agency to strengthen mitigation measures.
+            </p>
+          </div>
+        </div>
+
+        <p className="mt-3.5 text-xs text-foreground/85 leading-relaxed">
+          “The RAG layer retrieves relevant evidence based on the security alert rather than relying only on the language model’s general knowledge.”
+        </p>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 6 — AI-Assisted Triage
+          ========================================================================= */}
+      <SectionCard
+        title="AI-Assisted Incident Analysis"
+        subtitle="Evidence-grounded synthesis of parsed telemetry, threat feeds, and retrieved frameworks"
+      >
+        <p className="text-xs leading-relaxed text-foreground/85 sm:text-[0.8125rem]">
+          The AI reasoning layer operates strictly over the assembled Evidence Package. Instead of open-ended conversational generation, it synthesizes structured information into consistent output categories:
+        </p>
+
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
           {[
-            "Complete Security Alert",
-            "Alert Parser",
-            "MITRE / Playbook / CISA Retrieval",
-            "Threat Intelligence",
-            "Evidence Package",
-            "AI Triage Synthesis",
-            "Analyst Review",
-          ].map((s, idx, arr) => (
-            <div key={idx} className="flex items-center gap-1.5">
-              <span className="rounded bg-surface px-2 py-1 mono-xs text-foreground/90 border border-border">
-                {s}
+            "Incident Summary",
+            "Severity Assessment",
+            "Incident Type",
+            "Threat Intelligence Context",
+            "MITRE ATT&CK Context",
+            "Detection Evidence",
+            "Recommended Actions",
+            "Response Guidance",
+          ].map((cat, i) => (
+            <div key={i} className="rounded border border-border bg-surface/60 px-3 py-2 text-center">
+              <span className="mono-xs font-semibold text-foreground/90">{cat}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-4 rounded-md border border-border/80 bg-surface/40 p-3">
+          <p className="text-xs leading-relaxed text-foreground/85">
+            “AI-generated analysis is intended to support analyst investigation and decision-making. Security teams should validate findings against the underlying alert and available evidence.”
+          </p>
+        </div>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 7 — Analyst Dashboard
+          ========================================================================= */}
+      <SectionCard
+        title="Designed for SOC Analysts"
+        subtitle="Five primary investigation views organized to eliminate cognitive fragmentation"
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="rounded-md border border-border bg-panel p-3">
+            <span className="mono-xs font-bold text-primary block">Overview</span>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              Provides the high-level incident assessment, severity, incident type, source/destination information, threat-intelligence status, and AI assessment.
+            </p>
+          </div>
+
+          <div className="rounded-md border border-border bg-panel p-3">
+            <span className="mono-xs font-bold text-primary block">Evidence</span>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              Displays parsed alert information, extracted indicators, network evidence, and threat-intelligence evidence.
+            </p>
+          </div>
+
+          <div className="rounded-md border border-border bg-panel p-3">
+            <span className="mono-xs font-bold text-primary block">Detection</span>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              Displays MITRE ATT&CK context, threat-intelligence context, detection evidence, and CISA detection guidance.
+            </p>
+          </div>
+
+          <div className="rounded-md border border-border bg-panel p-3">
+            <span className="mono-xs font-bold text-primary block">Response</span>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              Displays recommended actions, response playbooks, and relevant defensive guidance.
+            </p>
+          </div>
+
+          <div className="rounded-md border border-border bg-panel p-3">
+            <span className="mono-xs font-bold text-primary block">Alert</span>
+            <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+              Displays the original complete security alert received by the system in a readable monospace format.
+            </p>
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 8 — Technology Stack
+          ========================================================================= */}
+      <SectionCard
+        title="Technology Stack"
+        subtitle="Technologies actively powering the production console, backend services, and AI pipelines"
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">Frontend</span>
+            <ul className="mt-2 space-y-1 mono-xs text-foreground/85">
+              <li>• React 19</li>
+              <li>• TypeScript</li>
+              <li>• TanStack (Router, Query, Start)</li>
+              <li>• Vite</li>
+              <li>• Tailwind CSS</li>
+            </ul>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">Backend</span>
+            <ul className="mt-2 space-y-1 mono-xs text-foreground/85">
+              <li>• Python 3.11+</li>
+              <li>• FastAPI & Uvicorn</li>
+              <li>• Pydantic v2 schemas</li>
+              <li>• Regex alert parsing engine</li>
+            </ul>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">AI / RAG</span>
+            <ul className="mt-2 space-y-1 mono-xs text-foreground/85">
+              <li>• xKiro — OpenAI-compatible LLM endpoint</li>
+              <li>• Google Gemini Embeddings</li>
+              <li>• FAISS — Vector similarity search</li>
+              <li>• Retrieval-Augmented Generation (RAG)</li>
+            </ul>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">Knowledge Stores</span>
+            <ul className="mt-2 space-y-1 mono-xs text-foreground/85">
+              <li>• MITRE ATT&CK knowledge base</li>
+              <li>• CISA guidance documents</li>
+              <li>• Security response playbooks</li>
+            </ul>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">Threat Intelligence</span>
+            <ul className="mt-2 space-y-1 mono-xs text-foreground/85">
+              <li>• SQLite local database</li>
+              <li>• URLhaus indicators</li>
+              <li>• ThreatFox indicators</li>
+              <li>• MalwareBazaar malware hashes</li>
+              <li>• CSV source datasets</li>
+            </ul>
+          </div>
+
+          <div className="rounded-md border border-border bg-surface/50 p-3.5">
+            <span className="label-caps text-primary">Database & Infrastructure</span>
+            <ul className="mt-2 space-y-1 mono-xs text-foreground/85">
+              <li>• Supabase PostgreSQL</li>
+              <li>• Render deployment hosting</li>
+              <li>• GitHub version control</li>
+            </ul>
+          </div>
+        </div>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 9 — Security & Reliability
+          ========================================================================= */}
+      <SectionCard
+        title="Security and Reliability"
+        subtitle="Defensive engineering principles safeguarding investigation integrity"
+      >
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[
+            {
+              title: "Deterministic Threat Intelligence",
+              desc: "Verified threat-intelligence lookup results are preserved rather than allowing AI-generated text to overwrite them.",
+            },
+            {
+              title: "Evidence-Based Analysis",
+              desc: "AI triage uses retrieved evidence from security knowledge sources rather than ungrounded parametric memory.",
+            },
+            {
+              title: "Structured Processing",
+              desc: "Raw alerts are converted into structured information before analysis to ensure uniform evaluation.",
+            },
+            {
+              title: "Persistent Incident Records",
+              desc: "Completed incidents can be stored for historical investigation and regulatory compliance.",
+            },
+            {
+              title: "Backend API Separation",
+              desc: "The frontend communicates with the backend API instead of directly accessing protected database credentials.",
+            },
+            {
+              title: "Secure Credentials",
+              desc: "Sensitive credentials and service keys remain server-side and outside the client-facing frontend bundle.",
+            },
+          ].map((item, idx) => (
+            <div key={idx} className="rounded-md border border-border bg-surface/40 p-3">
+              <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                <Lock className="size-3.5 text-primary" />
+                {item.title}
               </span>
-              {idx < arr.length - 1 && (
-                <ArrowRight className="size-3 text-muted-foreground shrink-0" />
-              )}
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
             </div>
           ))}
         </div>
       </SectionCard>
 
-      {/* SECTION 1 — What is Incident Triage AI? */}
-      <SectionCard title="1. What is Incident Triage AI?">
-        <div className="space-y-3 text-sm leading-relaxed text-foreground/90">
-          <p>
-            <strong>Incident Triage AI</strong> is a cybersecurity incident-triage platform designed
-            to help security operations center (SOC) analysts systematically process complete
-            security alerts. Rather than acting as a black-box conversational chatbot, the platform
-            follows a strictly deterministic, evidence-grounded workflow.
-          </p>
-          <div className="rounded border border-border/80 bg-panel/60 p-3 mono-xs space-y-1 text-foreground/80">
-            <div className="text-primary font-semibold">Deterministic Execution Flow:</div>
-            <div>
-              Complete Security Alert → Alert Parser → MITRE / Playbook / CISA Retrieval → Threat
-              Intelligence → Evidence Package → AI Triage Synthesis → Analyst Review
-            </div>
-          </div>
-          <p>
-            The system is entirely evidence-grounded. The underlying AI reasoning layer operates
-            strictly over the collected <strong>Evidence Package</strong>, which binds parsed alert
-            artifacts, similarity-retrieved knowledge bases, and live reputation scores together. It
-            never hallucinates findings or fabricates indicators.
-          </p>
-        </div>
-      </SectionCard>
-
-      {/* How the Knowledge Sources Help */}
+      {/* =========================================================================
+          SECTION 10 — Example Investigation
+          ========================================================================= */}
       <SectionCard
-        title="How the Knowledge Sources Help"
-        subtitle="Analyst-friendly overview of the three core cybersecurity knowledge sources"
+        title="Example Investigation"
+        subtitle="Illustration of the end-to-end evidence gathering and triage correlation"
       >
-        <div className="space-y-6">
-          {/* Exact Component/Question Table */}
-          <div className="overflow-x-auto rounded-md border border-border bg-panel/60">
-            <table className="w-full border-collapse text-left text-xs sm:text-sm">
-              <thead>
-                <tr className="border-b border-border bg-surface/70">
-                  <th className="px-4 py-3 font-semibold text-foreground">Component</th>
-                  <th className="px-4 py-3 font-semibold text-foreground">Main question</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border/60">
-                <tr className="transition-colors hover:bg-surface/40">
-                  <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">
-                    MITRE ATT&CK
-                  </td>
-                  <td className="px-4 py-3 text-foreground/90">
-                    🔍 What is the attacker doing?
-                  </td>
-                </tr>
-                <tr className="transition-colors hover:bg-surface/40">
-                  <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">
-                    Response Playbooks
-                  </td>
-                  <td className="px-4 py-3 text-foreground/90">
-                    🛠️ How should we investigate and respond?
-                  </td>
-                </tr>
-                <tr className="transition-colors hover:bg-surface/40">
-                  <td className="px-4 py-3 font-medium text-foreground whitespace-nowrap">
-                    CISA Guidance
-                  </td>
-                  <td className="px-4 py-3 text-foreground/90">
-                    📚 What established guidance can support our response?
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div className="rounded-md border border-border bg-panel p-4 space-y-3">
+          <div>
+            <span className="label-caps text-muted-foreground">Sample Alert Telemetry</span>
+            <p className="mt-1 font-mono text-xs text-foreground/90 bg-surface/70 p-2.5 rounded border border-border">
+              “Endpoint communication detected with a suspicious external URL associated with potential malware download activity.”
+            </p>
           </div>
 
-          {/* Short Explanations */}
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-md border border-border/80 bg-surface/40 p-3.5 space-y-1.5">
-              <div className="flex items-center gap-2 font-semibold text-foreground text-sm">
-                <span className="text-base" aria-hidden>🔍</span>
-                <span>MITRE ATT&CK</span>
-              </div>
-              <p className="text-xs text-foreground/85 leading-relaxed">
-                Identifies relevant attacker behaviors and techniques from the MITRE ATT&CK knowledge base.
-              </p>
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4 pt-1">
+            <div className="rounded border border-border bg-surface/40 p-2.5">
+              <span className="mono-xs font-semibold text-primary block">Alert Parsing</span>
+              <p className="text-[0.6875rem] text-muted-foreground mt-0.5">Extract URL and network flow</p>
             </div>
-
-            <div className="rounded-md border border-border/80 bg-surface/40 p-3.5 space-y-1.5">
-              <div className="flex items-center gap-2 font-semibold text-foreground text-sm">
-                <span className="text-base" aria-hidden>🛠️</span>
-                <span>Response Playbooks</span>
-              </div>
-              <p className="text-xs text-foreground/85 leading-relaxed">
-                Provides structured investigation and response procedures, including triage, investigation, containment, eradication, recovery, and escalation.
-              </p>
+            <div className="rounded border border-border bg-surface/40 p-2.5">
+              <span className="mono-xs font-semibold text-primary block">IOC Extraction</span>
+              <p className="text-[0.6875rem] text-muted-foreground mt-0.5">Identify suspicious destination URL</p>
             </div>
-
-            <div className="rounded-md border border-border/80 bg-surface/40 p-3.5 space-y-1.5">
-              <div className="flex items-center gap-2 font-semibold text-foreground text-sm">
-                <span className="text-base" aria-hidden>📚</span>
-                <span>CISA Guidance</span>
-              </div>
-              <p className="text-xs text-foreground/85 leading-relaxed">
-                Provides relevant cybersecurity guidance and recommendations from CISA to support incident investigation and response.
-              </p>
+            <div className="rounded border border-border bg-surface/40 p-2.5">
+              <span className="mono-xs font-semibold text-primary block">Threat Intelligence</span>
+              <p className="text-[0.6875rem] text-muted-foreground mt-0.5">Search local indexed database</p>
+            </div>
+            <div className="rounded border border-border bg-surface/40 p-2.5">
+              <span className="mono-xs font-semibold text-primary block">Threat Context</span>
+              <p className="text-[0.6875rem] text-muted-foreground mt-0.5">Correlate matching source feeds</p>
+            </div>
+            <div className="rounded border border-border bg-surface/40 p-2.5">
+              <span className="mono-xs font-semibold text-primary block">RAG Retrieval</span>
+              <p className="text-[0.6875rem] text-muted-foreground mt-0.5">Retrieve MITRE, playbook, CISA</p>
+            </div>
+            <div className="rounded border border-border bg-surface/40 p-2.5">
+              <span className="mono-xs font-semibold text-primary block">AI Triage</span>
+              <p className="text-[0.6875rem] text-muted-foreground mt-0.5">Generate structured assessment</p>
+            </div>
+            <div className="rounded border border-border bg-surface/40 p-2.5 sm:col-span-2">
+              <span className="mono-xs font-semibold text-primary block">Response Guidance</span>
+              <p className="text-[0.6875rem] text-muted-foreground mt-0.5">Present actionable containment steps</p>
             </div>
           </div>
 
-          {/* Visual Workflow */}
-          <div className="space-y-2 pt-2 border-t border-border/60">
-            <div className="text-xs font-semibold text-foreground uppercase tracking-wider">
-              Investigation & Triage Workflow
+          <p className="text-[0.6875rem] text-muted-foreground italic pt-1">
+            * Note: This example demonstrates the investigation flow and is not a claim about a specific real-world incident.
+          </p>
+        </div>
+      </SectionCard>
+
+      {/* =========================================================================
+          SECTION 11 — Key Capabilities
+          ========================================================================= */}
+      <SectionCard
+        title="Key Capabilities"
+        subtitle="Core operational features empowering tier-1 and tier-2 incident triage"
+      >
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {[
+            {
+              title: "Complete Alert Analysis",
+              desc: "Analyze a complete security alert in one workflow without manual field decomposition.",
+            },
+            {
+              title: "IOC Investigation",
+              desc: "Extract and investigate observable indicators such as IPs, URLs, and file hashes automatically.",
+            },
+            {
+              title: "Threat Intelligence Correlation",
+              desc: "Correlate indicators with indexed threat-intelligence sources like URLhaus, ThreatFox, and MalwareBazaar.",
+            },
+            {
+              title: "Multi-Source RAG",
+              desc: "Retrieve cybersecurity context from MITRE ATT&CK, response playbooks, and CISA advisories.",
+            },
+            {
+              title: "AI-Assisted Triage",
+              desc: "Generate structured investigation context and prioritized response recommendations.",
+            },
+            {
+              title: "Incident History",
+              desc: "Store and review completed investigations through the client-side incident history system.",
+            },
+          ].map((item, idx) => (
+            <div key={idx} className="rounded-md border border-border bg-surface/50 p-3.5">
+              <p className="text-xs font-semibold text-foreground flex items-center gap-1.5">
+                <Zap className="size-3.5 text-primary" />
+                {item.title}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{item.desc}</p>
             </div>
-            {/* Desktop / Large Screen Horizontal Workflow */}
-            <div className="hidden lg:flex items-center justify-between gap-1 rounded-md border border-border bg-panel/70 p-3.5">
-              <div className="flex-1 rounded border border-border/70 bg-surface/70 p-2.5 text-center">
-                <div className="text-xs font-bold text-foreground">Security Alert</div>
-                <div className="mt-0.5 text-[0.6875rem] text-muted-foreground">Incoming raw payload</div>
-              </div>
+          ))}
+        </div>
+      </SectionCard>
 
-              <ArrowRight className="size-4 text-primary shrink-0" />
-
-              <div className="flex-1 rounded border border-primary/30 bg-surface/70 p-2.5 text-center">
-                <div className="text-xs font-bold text-foreground">🔍 MITRE ATT&CK</div>
-                <div className="mt-0.5 text-[0.6875rem] text-primary/90 font-medium">What is the attacker doing?</div>
-              </div>
-
-              <ArrowRight className="size-4 text-primary shrink-0" />
-
-              <div className="flex-1 rounded border border-primary/30 bg-surface/70 p-2.5 text-center">
-                <div className="text-xs font-bold text-foreground">🛠️ Response Playbooks</div>
-                <div className="mt-0.5 text-[0.6875rem] text-primary/90 font-medium">How should we investigate/respond?</div>
-              </div>
-
-              <ArrowRight className="size-4 text-primary shrink-0" />
-
-              <div className="flex-1 rounded border border-primary/30 bg-surface/70 p-2.5 text-center">
-                <div className="text-xs font-bold text-foreground">📚 CISA Guidance</div>
-                <div className="mt-0.5 text-[0.6875rem] text-primary/90 font-medium">What established guidance can support our response?</div>
-              </div>
-
-              <ArrowRight className="size-4 text-primary shrink-0" />
-
-              <div className="flex-1 rounded border border-border/70 bg-surface/70 p-2.5 text-center">
-                <div className="text-xs font-bold text-foreground">🤖 AI Triage</div>
-                <div className="mt-0.5 text-[0.6875rem] text-muted-foreground">Evidence-grounded analysis</div>
-              </div>
-
-              <ArrowRight className="size-4 text-primary shrink-0" />
-
-              <div className="flex-1 rounded border border-border/70 bg-surface/70 p-2.5 text-center">
-                <div className="text-xs font-bold text-foreground">👤 Analyst Review</div>
-                <div className="mt-0.5 text-[0.6875rem] text-muted-foreground">Final human validation</div>
-              </div>
-            </div>
-
-            {/* Mobile / Tablet Vertical Workflow */}
-            <div className="flex flex-col items-stretch gap-1.5 lg:hidden rounded-md border border-border bg-panel/70 p-3">
-              <div className="rounded border border-border/70 bg-surface/70 p-2 text-center">
-                <div className="text-xs font-bold text-foreground">Security Alert</div>
-              </div>
-
-              <div className="flex justify-center"><ArrowDown className="size-3.5 text-primary" /></div>
-
-              <div className="rounded border border-primary/30 bg-surface/70 p-2 text-center">
-                <div className="text-xs font-bold text-foreground">🔍 MITRE ATT&CK</div>
-                <div className="text-[0.6875rem] text-primary/90 font-medium">What is the attacker doing?</div>
-              </div>
-
-              <div className="flex justify-center"><ArrowDown className="size-3.5 text-primary" /></div>
-
-              <div className="rounded border border-primary/30 bg-surface/70 p-2 text-center">
-                <div className="text-xs font-bold text-foreground">🛠️ Response Playbooks</div>
-                <div className="text-[0.6875rem] text-primary/90 font-medium">How should we investigate/respond?</div>
-              </div>
-
-              <div className="flex justify-center"><ArrowDown className="size-3.5 text-primary" /></div>
-
-              <div className="rounded border border-primary/30 bg-surface/70 p-2 text-center">
-                <div className="text-xs font-bold text-foreground">📚 CISA Guidance</div>
-                <div className="text-[0.6875rem] text-primary/90 font-medium">What established guidance can support our response?</div>
-              </div>
-
-              <div className="flex justify-center"><ArrowDown className="size-3.5 text-primary" /></div>
-
-              <div className="rounded border border-border/70 bg-surface/70 p-2 text-center">
-                <div className="text-xs font-bold text-foreground">🤖 AI Triage</div>
-                <div className="text-[0.6875rem] text-muted-foreground">Evidence-grounded analysis</div>
-              </div>
-
-              <div className="flex justify-center"><ArrowDown className="size-3.5 text-primary" /></div>
-
-              <div className="rounded border border-border/70 bg-surface/70 p-2 text-center">
-                <div className="text-xs font-bold text-foreground">👤 Analyst Review</div>
-                <div className="text-[0.6875rem] text-muted-foreground">Final human validation</div>
-              </div>
-            </div>
+      {/* =========================================================================
+          SECTION 12 — Analyst-First Design
+          ========================================================================= */}
+      <SectionCard
+        title="Built for Analyst Workflows"
+        subtitle="Human-in-the-loop architecture designed around operational SOC realities"
+      >
+        <div className="space-y-3 text-xs leading-relaxed text-foreground/85">
+          <p>
+            “The platform is designed around the investigation workflow of a security analyst. Instead of presenting isolated AI-generated text, it organizes alert details, indicators, threat-intelligence results, retrieved security knowledge, detection context, and response guidance into a structured incident view.”
+          </p>
+          <div className="rounded-md border border-primary/30 bg-primary/5 p-3 text-primary font-medium">
+            “AI assists the investigation; the analyst remains responsible for validating evidence and making the final security decision.”
           </div>
         </div>
       </SectionCard>
 
-      {/* Functional Sidebar Section Guides (Grid) */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* SECTION 2 — Analyze Alert */}
-        <SectionCard
-          title="2. Analyze Alert"
-          subtitle="Primary ingestion and automated triage workspace"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <Radar className="size-4 text-primary" />
-              <span>How it works:</span>
-            </div>
-            <ul className="list-disc space-y-1 pl-5 text-xs text-foreground/85">
-              <li>
-                Analysts paste <strong>one complete security alert</strong> (JSON, Syslog, or raw
-                SIEM export).
-              </li>
-              <li>
-                The backend parser extracts alert metadata, network context, behavioral evidence, and
-                observable IOCs.
-              </li>
-              <li>
-                The RAG pipeline queries vector indices to retrieve relevant MITRE ATT&CK techniques,
-                response playbooks, and CISA guidance.
-              </li>
-              <li>
-                Extracted IOCs can be optionally enriched via local caches or live threat feeds.
-              </li>
-              <li>
-                An immutable Evidence Package is constructed and submitted to Google Gemini for
-                advisory triage synthesis.
-              </li>
-              <li>
-                <strong>Analyst review remains required</strong> before any containment or
-                remediation action.
-              </li>
-            </ul>
-          </div>
-        </SectionCard>
+      {/* =========================================================================
+          FINAL SECTION — From Alert to Investigation
+          ========================================================================= */}
+      <div className="rounded-lg border border-border bg-panel p-6 text-center space-y-4 shadow-sm">
+        <h3 className="text-sm font-bold tracking-tight text-foreground uppercase">
+          From Alert to Investigation
+        </h3>
 
-        {/* SECTION 3 — Incident History */}
-        <SectionCard
-          title="3. Incident History"
-          subtitle="Session incident tracking and comparison"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <History className="size-4 text-primary" />
-              <span>Current Session Behavior:</span>
-            </div>
-            <p className="text-xs text-foreground/85">
-              Incident history is currently maintained for the active application session.
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Analyses completed during your active browser session are held in memory, enabling SOC
-              analysts to switch between active investigations, compare assessed severities, review
-              triage reports, and inspect historical evidence packages without re-running triage.
-              No permanent database storage is used or implied.
-            </p>
-          </div>
-        </SectionCard>
+        {/* Large Visual Statement */}
+        <div className="mx-auto flex max-w-sm flex-col items-center gap-1 font-mono text-xs font-semibold text-primary">
+          <span className="rounded bg-surface px-3 py-1 border border-border w-full">RAW SECURITY ALERT</span>
+          <ArrowDown className="size-3 text-muted-foreground" />
+          <span className="rounded bg-surface px-3 py-1 border border-border w-full">STRUCTURED EVIDENCE</span>
+          <ArrowDown className="size-3 text-muted-foreground" />
+          <span className="rounded bg-surface px-3 py-1 border border-border w-full">THREAT INTELLIGENCE</span>
+          <ArrowDown className="size-3 text-muted-foreground" />
+          <span className="rounded bg-surface px-3 py-1 border border-border w-full">SECURITY KNOWLEDGE</span>
+          <ArrowDown className="size-3 text-muted-foreground" />
+          <span className="rounded bg-surface px-3 py-1 border border-border w-full">AI TRIAGE</span>
+          <ArrowDown className="size-3 text-muted-foreground" />
+          <span className="rounded bg-primary/20 px-3 py-1 border border-primary text-foreground w-full">ACTIONABLE INVESTIGATION CONTEXT</span>
+        </div>
 
-        {/* SECTION 4 — Threat Intelligence */}
-        <SectionCard
-          title="4. Threat Intelligence"
-          subtitle="Local reputation datasets & live feed enrichment"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <Crosshair className="size-4 text-primary" />
-              <span>IOC Investigation & Feed Sources:</span>
-            </div>
-            <ul className="list-disc space-y-1 pl-5 text-xs text-foreground/85">
-              <li>
-                Investigates observable indicators: <strong>IP addresses</strong>,{" "}
-                <strong>domains</strong>, <strong>URLs</strong>, and{" "}
-                <strong>file hashes</strong> (MD5, SHA-1, SHA-256).
-              </li>
-              <li>
-                Queries high-performance local threat-intelligence caches for instant offline
-                lookups.
-              </li>
-              <li>
-                Supports optional live enrichment against open-source abuse feeds:{" "}
-                <strong>ThreatFox</strong> (IP/domain malware associations),{" "}
-                <strong>URLhaus</strong> (malicious URLs), and <strong>MalwareBazaar</strong> (hash
-                payloads).
-              </li>
-            </ul>
-            <div className="rounded border border-primary/30 bg-panel/70 p-2 text-xs text-primary/95 font-medium">
-              Important: No threat-intelligence match does not mean the IOC is benign. Private,
-              internal, or novel indicators often exhibit zero prior hits.
-            </div>
-          </div>
-        </SectionCard>
+        <p className="mx-auto max-w-2xl text-xs leading-relaxed text-muted-foreground">
+          “Cybersecurity Incident Triage AI brings multiple investigation steps into a single SOC-oriented workflow, helping analysts move from an incoming security alert toward structured evidence, contextual analysis, and response guidance.”
+        </p>
 
-        {/* SECTION 5 — MITRE ATT&CK */}
-        <SectionCard
-          title="5. MITRE ATT&CK"
-          subtitle="Semantic mapping to adversary tactics & techniques"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <ListChecks className="size-4 text-primary" />
-              <span>Technique Candidate Evaluation:</span>
-            </div>
-            <ul className="list-disc space-y-1 pl-5 text-xs text-foreground/85">
-              <li>
-                Dense vector similarity retrieves candidate MITRE ATT&CK Enterprise techniques based
-                on behavioral evidence.
-              </li>
-              <li>
-                Presents technique IDs (e.g., T1059.001), formal names, descriptions, and supporting
-                observables.
-              </li>
-              <li>
-                The AI engine validates each candidate against alert facts and assigns a clear
-                assessment status: <strong>Supported</strong>, <strong>Plausible</strong>, or{" "}
-                <strong>Not Supported</strong>.
-              </li>
-            </ul>
-            <div className="rounded border border-border bg-surface/50 p-2 text-xs text-muted-foreground">
-              Retrieval similarity is used to identify candidate evidence. It is not itself a
-              confidence score or final classification.
-            </div>
-          </div>
-        </SectionCard>
-
-        {/* SECTION 6 — Response Playbooks */}
-        <SectionCard
-          title="6. Response Playbooks"
-          subtitle="Standardized procedural guidance for containment"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <BookOpenCheck className="size-4 text-primary" />
-              <span>Lifecycle Guidance Stages:</span>
-            </div>
-            <p className="text-xs text-foreground/85">
-              Playbooks retrieved by the RAG orchestrator provide structured incident-response
-              procedures aligned with industry IR lifecycles:
-            </p>
-            <div className="grid grid-cols-2 gap-1.5 text-xs text-foreground/80">
-              <div className="rounded bg-panel px-2 py-1 border border-border/60">
-                • Initial Triage
-              </div>
-              <div className="rounded bg-panel px-2 py-1 border border-border/60">
-                • Investigation
-              </div>
-              <div className="rounded bg-panel px-2 py-1 border border-border/60">
-                • Containment
-              </div>
-              <div className="rounded bg-panel px-2 py-1 border border-border/60">
-                • Eradication
-              </div>
-              <div className="rounded bg-panel px-2 py-1 border border-border/60">• Recovery</div>
-              <div className="rounded bg-panel px-2 py-1 border border-border/60">
-                • Evidence Collection
-              </div>
-              <div className="rounded bg-panel px-2 py-1 border border-border/60">
-                • Escalation Criteria
-              </div>
-              <div className="rounded bg-panel px-2 py-1 border border-border/60">
-                • Closure Criteria
-              </div>
-            </div>
-          </div>
-        </SectionCard>
-
-        {/* SECTION 7 — CISA Guidance */}
-        <SectionCard
-          title="7. CISA Guidance"
-          subtitle="Authoritative national cybersecurity advisories"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <ScrollText className="size-4 text-primary" />
-              <span>Integrated Advisory Domains:</span>
-            </div>
-            <ul className="list-disc space-y-1 pl-5 text-xs text-foreground/85">
-              <li>
-                <strong>Incident Response:</strong> Federal best practices for rapid response and
-                threat mitigation.
-              </li>
-              <li>
-                <strong>Ransomware:</strong> Actionable joint CISA/FBI guidance for extortion and
-                malware attacks.
-              </li>
-              <li>
-                <strong>Logging & Monitoring:</strong> Telemetry collection and audit log
-                retention recommendations.
-              </li>
-              <li>
-                <strong>Network Visibility & Hardening:</strong> Perimeter protection and lateral
-                movement defense.
-              </li>
-              <li>
-                <strong>CISA Security Advisories:</strong> Known exploited vulnerability (KEV)
-                catalog links and cross-references.
-              </li>
-            </ul>
-            <p className="text-[0.6875rem] italic text-muted-foreground">
-              Note: This application references publicly published CISA security documentation.
-              CISA does not endorse or certify this software.
-            </p>
-          </div>
-        </SectionCard>
-
-        {/* SECTION 8 — Reports */}
-        <SectionCard
-          title="8. Reports"
-          subtitle="Comprehensive, reproducible triage documentation"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <FileText className="size-4 text-primary" />
-              <span>Structured Report Schema:</span>
-            </div>
-            <p className="text-xs text-foreground/85">
-              Every analyzed incident produces an audited, structured triage report containing:
-            </p>
-            <div className="flex flex-wrap gap-1 text-[0.6875rem]">
-              {[
-                "Incident Assessment",
-                "Severity Assessment",
-                "Behavioral Evidence",
-                "IOC Findings",
-                "Threat Intel Findings",
-                "MITRE Analysis",
-                "Playbook Steps",
-                "CISA Guidance",
-                "Recommended Actions",
-                "Known Limitations",
-                "Analyst Review Requirement",
-              ].map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded bg-surface px-1.5 py-0.5 border border-border text-foreground/80"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div className="mt-2 flex items-center gap-2 pt-1 border-t border-border/60 text-xs">
-              <span className="font-semibold text-foreground">Export Options:</span>
-              <span className="rounded border border-border px-1.5 py-0.5 mono-xs bg-panel">
-                Copy Report
-              </span>
-              <span className="rounded border border-border px-1.5 py-0.5 mono-xs bg-panel">
-                Download JSON
-              </span>
-            </div>
-          </div>
-        </SectionCard>
-
-        {/* SECTION 9 — Incident AI Assistant */}
-        <SectionCard
-          title="9. Incident AI Assistant"
-          subtitle="Interactive evidence-grounded Q&A"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <Bot className="size-4 text-primary" />
-              <span>Scoped Assistant Inquiries:</span>
-            </div>
-            <p className="text-xs text-foreground/85">
-              Analysts can ask targeted questions about the active incident (e.g., &ldquo;Why was
-              this classified this way?&rdquo;, &ldquo;Which MITRE techniques are supported?&rdquo;).
-            </p>
-            <div className="rounded border border-border/80 bg-panel/60 p-2.5 text-xs text-foreground/90 space-y-1">
-              <div className="font-semibold text-primary">Scoped Operational Boundary:</div>
-              <p className="text-muted-foreground leading-normal">
-                The assistant operates strictly within the application&apos;s evidence-grounded
-                workflow. It is <strong>not an unrestricted, open-ended prompt interface</strong>.
-                Answers are anchored to the specific alert text, retrieved knowledge bases, and
-                observed telemetry to prevent speculative hallucinations.
-              </p>
-            </div>
-          </div>
-        </SectionCard>
-
-        {/* SECTION 10 — Settings */}
-        <SectionCard
-          title="10. Settings"
-          subtitle="API connection parameters & system diagnostics"
-        >
-          <div className="space-y-2 text-sm leading-relaxed text-foreground/90">
-            <div className="flex items-center gap-2 font-medium text-foreground">
-              <Settings2 className="size-4 text-primary" />
-              <span>Console Configuration & Security:</span>
-            </div>
-            <ul className="list-disc space-y-1 pl-5 text-xs text-foreground/85">
-              <li>
-                <strong>Backend API Connection:</strong> Configure and validate the FastAPI
-                backend service URL reachable by the browser.
-              </li>
-              <li>
-                <strong>Health & Latency Probes:</strong> Monitor live connectivity, response status,
-                and round-trip diagnostics.
-              </li>
-              <li>
-                <strong>Endpoint Resolution:</strong> Resolves in order: Local in-app setting →
-                Build-time <code>VITE_API_BASE_URL</code> → Default <code>http://127.0.0.1:8000</code>.
-              </li>
-            </ul>
-            <div className="rounded border border-ok/30 bg-ok/10 p-2 text-xs text-ok font-medium">
-              Security Guarantee: Sensitive API keys (e.g., Google Gemini credentials) remain
-              strictly isolated in the backend service environment and are never exposed or
-              transmitted to the frontend.
-            </div>
-          </div>
-        </SectionCard>
+        <div className="border-t border-border pt-4">
+          <p className="text-xs font-semibold text-foreground">Cybersecurity Incident Triage AI</p>
+          <p className="text-[0.6875rem] text-muted-foreground">AI-assisted security alert investigation platform</p>
+        </div>
       </div>
-
-      {/* SECTION 11 — Evidence-First Architecture */}
-      <SectionCard
-        title="11. Evidence-First Architecture"
-        subtitle="Step-by-step pipeline execution model"
-      >
-        <div className="space-y-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-2 rounded-md border border-border bg-panel p-3 mono-xs">
-            <div className="text-center font-bold text-foreground">ALERT</div>
-            <ArrowRight className="hidden md:block size-3.5 text-primary" />
-            <ArrowDown className="md:hidden size-3 text-primary" />
-            <div className="text-center font-bold text-foreground">PARSE</div>
-            <ArrowRight className="hidden md:block size-3.5 text-primary" />
-            <ArrowDown className="md:hidden size-3 text-primary" />
-            <div className="text-center font-bold text-foreground">RETRIEVE EVIDENCE</div>
-            <ArrowRight className="hidden md:block size-3.5 text-primary" />
-            <ArrowDown className="md:hidden size-3 text-primary" />
-            <div className="text-center font-bold text-foreground">THREAT INTEL</div>
-            <ArrowRight className="hidden md:block size-3.5 text-primary" />
-            <ArrowDown className="md:hidden size-3 text-primary" />
-            <div className="text-center font-bold text-foreground">EVIDENCE PACKAGE</div>
-            <ArrowRight className="hidden md:block size-3.5 text-primary" />
-            <ArrowDown className="md:hidden size-3 text-primary" />
-            <div className="text-center font-bold text-foreground">AI TRIAGE</div>
-            <ArrowRight className="hidden md:block size-3.5 text-primary" />
-            <ArrowDown className="md:hidden size-3 text-primary" />
-            <div className="text-center font-bold text-foreground">ANALYST REVIEW</div>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 text-xs">
-            <div className="rounded border border-border bg-surface/40 p-3 space-y-1">
-              <div className="font-semibold text-foreground">1. Alert Ingestion</div>
-              <p className="text-muted-foreground leading-normal">
-                Ingests single raw cybersecurity alerts containing process executions, network logs,
-                or authentication events.
-              </p>
-            </div>
-            <div className="rounded border border-border bg-surface/40 p-3 space-y-1">
-              <div className="font-semibold text-foreground">2. Deterministic Parsing</div>
-              <p className="text-muted-foreground leading-normal">
-                Extracts metadata, event categories, internal/external network endpoints, and IOCs
-                without language model guessing.
-              </p>
-            </div>
-            <div className="rounded border border-border bg-surface/40 p-3 space-y-1">
-              <div className="font-semibold text-foreground">3. Multi-Source Retrieval</div>
-              <p className="text-muted-foreground leading-normal">
-                Queries local FAISS vector stores containing MITRE ATT&CK techniques, playbook
-                checklists, and CISA advisories.
-              </p>
-            </div>
-            <div className="rounded border border-border bg-surface/40 p-3 space-y-1">
-              <div className="font-semibold text-foreground">4. Threat Intelligence</div>
-              <p className="text-muted-foreground leading-normal">
-                Matches observable network and file hashes against offline databases and live
-                Abuse.ch feeds.
-              </p>
-            </div>
-            <div className="rounded border border-border bg-surface/40 p-3 space-y-1">
-              <div className="font-semibold text-foreground">5. Evidence Package</div>
-              <p className="text-muted-foreground leading-normal">
-                Assembles all verified evidence into a consolidated, structured schema that bounds
-                all subsequent processing.
-              </p>
-            </div>
-            <div className="rounded border border-border bg-surface/40 p-3 space-y-1">
-              <div className="font-semibold text-foreground">6. Grounded AI Triage</div>
-              <p className="text-muted-foreground leading-normal">
-                Gemini evaluates the evidence package to assess severity, justify classifications,
-                and recommend immediate actions.
-              </p>
-            </div>
-            <div className="rounded border border-border bg-surface/40 p-3 space-y-1 sm:col-span-2">
-              <div className="font-semibold text-foreground">7. Human Analyst Review</div>
-              <p className="text-muted-foreground leading-normal">
-                Ensures accountability. The human SOC analyst reviews evidence, validates MITRE
-                technique support, and authorizes final containment.
-              </p>
-            </div>
-          </div>
-        </div>
-      </SectionCard>
-
-      {/* SECTION 12 — Technology / Architecture */}
-      <SectionCard
-        title="12. Technology / Architecture"
-        subtitle="Verified project technology stack and implementation layers"
-      >
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 text-xs">
-          <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface/40 p-3">
-            <Server className="mt-0.5 size-4 text-primary shrink-0" />
-            <div>
-              <div className="font-semibold text-foreground">FastAPI Backend Service</div>
-              <p className="mt-1 text-muted-foreground leading-normal">
-                Python 3.13 asynchronous REST API providing validation, deterministic alert parsing,
-                and singleton RAG orchestrator lifecycle management.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface/40 p-3">
-            <Layers className="mt-0.5 size-4 text-primary shrink-0" />
-            <div>
-              <div className="font-semibold text-foreground">React / TanStack Frontend</div>
-              <p className="mt-1 text-muted-foreground leading-normal">
-                TanStack Start, TanStack Router, TanStack Query, Tailwind CSS v4, and Lucide icons
-                delivering a real-time dark SOC console interface.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface/40 p-3">
-            <Database className="mt-0.5 size-4 text-primary shrink-0" />
-            <div>
-              <div className="font-semibold text-foreground">MITRE ATT&CK RAG</div>
-              <p className="mt-1 text-muted-foreground leading-normal">
-                FAISS vector index (1,488 indexed vectors) paired with SentenceTransformers
-                (all-MiniLM-L6-v2) for semantic technique retrieval.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface/40 p-3">
-            <BookOpenCheck className="mt-0.5 size-4 text-primary shrink-0" />
-            <div>
-              <div className="font-semibold text-foreground">Incident Playbook RAG</div>
-              <p className="mt-1 text-muted-foreground leading-normal">
-                Specialized FAISS vector index of standardized incident-response playbooks for
-                containment, investigation, and recovery procedures.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface/40 p-3">
-            <ScrollText className="mt-0.5 size-4 text-primary shrink-0" />
-            <div>
-              <div className="font-semibold text-foreground">CISA Guidance RAG</div>
-              <p className="mt-1 text-muted-foreground leading-normal">
-                Dedicated FAISS vector store indexing federal security advisories, ransomware
-                guidance, and network hardening benchmarks.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface/40 p-3">
-            <Crosshair className="mt-0.5 size-4 text-primary shrink-0" />
-            <div>
-              <div className="font-semibold text-foreground">Threat Intelligence Services</div>
-              <p className="mt-1 text-muted-foreground leading-normal">
-                Local indicator datasets paired with live integrations to Abuse.ch feeds (ThreatFox,
-                URLhaus, and MalwareBazaar).
-              </p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-2.5 rounded-md border border-border bg-surface/40 p-3 sm:col-span-2 lg:col-span-3">
-            <Cpu className="mt-0.5 size-4 text-primary shrink-0" />
-            <div>
-              <div className="font-semibold text-foreground">Google Gemini AI Reasoning</div>
-              <p className="mt-1 text-muted-foreground leading-normal">
-                Server-side evidence synthesis using Google Gemini API. Analyzes only the bounded
-                evidence package to produce severity assessments, MITRE validation, and recommended
-                actions, with fallback reports when API keys or network are unavailable.
-              </p>
-            </div>
-          </div>
-        </div>
-      </SectionCard>
     </div>
   );
 }

@@ -2,8 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { useIsMutating } from "@tanstack/react-query";
 import {
   Activity,
+  History,
+  Home,
   Info,
-  Radar,
   Settings2,
   ShieldAlert,
 } from "lucide-react";
@@ -13,7 +14,8 @@ import { useBackendHealth } from "@/hooks/useBackendHealth";
 import { StatusDot } from "./primitives";
 
 const NAV = [
-  { to: "/", label: "Analyze Alert", icon: Radar },
+  { to: "/", label: "Home", icon: Home },
+  { to: "/history", label: "Incident History", icon: History },
   { to: "/settings", label: "Settings", icon: Settings2 },
   { to: "/about", label: "About", icon: Info },
 ] as const;
@@ -48,8 +50,6 @@ function HealthBadge() {
     </div>
   );
 }
-
-
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { active, incidents } = useIncidents();
@@ -91,27 +91,29 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="sticky top-0 z-10 border-b border-border bg-panel/95 backdrop-blur">
-          <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 md:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 md:px-6">
             <div className="min-w-0">
               <h1 className="truncate text-base font-semibold tracking-tight text-foreground">
-                Cybersecurity Incident Triage AI
+                Incident Triage AI
               </h1>
-              <p className="mt-0.5 text-xs text-muted-foreground">
-                Evidence-Grounded SOC Incident Analysis
-              </p>
+              <p className="mono-xs text-muted-foreground">SOC Console</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
-              {active && (
+              <HealthBadge />
+              {active ? (
                 <div className="flex items-center gap-2 rounded-md border border-border bg-surface px-2.5 py-1.5">
                   <Activity className="size-3.5 text-primary" aria-hidden />
                   <span className="mono-xs text-foreground/85">
-                    {active.alert_id ?? "Alert ID not available"}
+                    {active.alert_id ?? "Alert ID Active"}
                   </span>
                 </div>
+              ) : (
+                <div className="flex items-center gap-2 rounded-md border border-border bg-surface/50 px-2.5 py-1.5">
+                  <Activity className="size-3.5 text-muted-foreground" aria-hidden />
+                  <span className="mono-xs text-muted-foreground">No active alert</span>
+                </div>
               )}
-              <HealthBadge />
             </div>
-
           </div>
           <nav className="flex gap-1 overflow-x-auto border-t border-border px-2 py-2 md:hidden">
             {NAV.map(({ to, label }) => (

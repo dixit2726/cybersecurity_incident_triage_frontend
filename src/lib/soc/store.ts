@@ -7,7 +7,7 @@ import type { StoredIncident, TriageResponse } from "./types";
  * Nothing is seeded, generated, or simulated.
  */
 
-const STORAGE_KEY = "soc.session_incidents";
+const STORAGE_KEY = "soc.user_incident_history";
 const MAX_ITEMS = 50;
 
 interface State {
@@ -26,9 +26,13 @@ function emit() {
 function persist() {
   if (typeof window === "undefined") return;
   try {
-    window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
-    /* storage unavailable: keep in-memory state only */
+    try {
+      window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch {
+      /* storage unavailable: keep in-memory state only */
+    }
   }
 }
 
@@ -36,7 +40,10 @@ function hydrate() {
   if (hydrated || typeof window === "undefined") return;
   hydrated = true;
   try {
-    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    let raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      raw = window.sessionStorage.getItem("soc.session_incidents");
+    }
     if (!raw) return;
     const parsed = JSON.parse(raw) as State;
     if (parsed && Array.isArray(parsed.incidents)) {

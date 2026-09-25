@@ -145,13 +145,13 @@ export function MatchBadge({ matched }: { matched?: boolean | undefined }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-sm border px-2 py-0.5 mono-xs font-semibold",
+        "inline-flex items-center rounded-sm border px-2 py-0.5 mono-xs font-semibold tracking-wide uppercase",
         matched
-          ? "border-danger/40 bg-danger/15 text-danger"
+          ? "border-ok/50 bg-ok/15 text-ok"
           : "border-border bg-surface-raised text-muted-foreground",
       )}
     >
-      {matched ? "Match found" : "No match"}
+      {matched ? "MATCH FOUND" : "NO MATCH"}
     </span>
   );
 }

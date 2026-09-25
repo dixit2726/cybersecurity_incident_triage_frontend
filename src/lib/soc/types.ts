@@ -19,8 +19,11 @@ export interface IocFinding {
 
 export interface ThreatIntelFinding {
   ioc?: string;
+  queried_ioc?: string;
   source?: string;
   match_found?: boolean;
+  ioc_type?: string;
+  threat_type?: string;
   interpretation?: string;
 }
 

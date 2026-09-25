@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Copy, Download, Eraser, Loader2, Play } from "lucide-react";
+import { Copy, Download, Eraser, FileText, Loader2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -11,27 +11,28 @@ import { describeError, postTriage } from "@/lib/soc/api";
 import { addIncidentFromResponse, useIncidents } from "@/lib/soc/store";
 import { copyIncidentJson, downloadIncidentJson } from "@/lib/soc/export";
 import {
-  ActionsPanel,
   AlertSourcePanel,
-  CisaPanel,
+  DetectionPanel,
   EvidencePanel,
-  IocPanel,
-  MitrePanel,
   OverviewPanel,
-  PlaybookPanel,
-  ThreatIntelPanel,
+  ResponsePanel,
 } from "./panels";
 import { EmptyState, ErrorPanel, ReviewBanner, SectionCard, SeverityBadge } from "./primitives";
 import { IncidentAssistant } from "./IncidentAssistant";
 
-const PIPELINE = [
-  "Parse alert",
-  "Retrieve MITRE / playbook / CISA evidence",
-  "Check threat intelligence",
-  "Build evidence package",
-  "AI triage synthesis",
-  "Analyst review",
-];
+const SAMPLE_ALERT = `ALERT ID: SEC-2026-0925-001
+Timestamp: 2026-09-25 10:30:00 UTC
+Alert Type: Malicious URL Detection
+Event Type: Malware Download Activity
+Severity: HIGH
+Source IP: 10.10.25.14
+Destination IP: 219.155.83.56
+Protocol: HTTP
+Destination Port: 57148
+URL: http://219.155.83.56:57148/i
+IOC Type: URL
+IOC: http://219.155.83.56:57148/i
+Description: Endpoint communication detected with a suspicious external URL associated with potential malware download activity.`;
 
 export function AnalyzeWorkspace() {
   const queryClient = useQueryClient();
@@ -49,7 +50,7 @@ export function AnalyzeWorkspace() {
         alertText: variables.alert_text,
         enableLive: variables.enable_live,
       });
-      // The triage request just succeeded, so the API is definitively healthy
+      // The triage request succeeded, mark API healthy
       queryClient.setQueryData(["soc", "health"], { status: "healthy" });
       toast.success("Triage report received from the backend.");
     },
@@ -70,10 +71,11 @@ export function AnalyzeWorkspace() {
   const error = triage.isError ? describeError(triage.error) : null;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
+      {/* 4. Alert Analysis Area */}
       <SectionCard
-        title="Complete Security Alert"
-        subtitle="Paste one complete alert. The backend parser extracts indicators, behaviour and metadata — no separate fields are needed."
+        title="Analyze Security Alert"
+        subtitle="Paste one complete security alert. The AI will automatically extract indicators, enrich with threat intelligence, map to MITRE ATT&CK, and provide response guidance."
         actions={
           <div className="flex items-center gap-2">
             <Switch
@@ -82,7 +84,7 @@ export function AnalyzeWorkspace() {
               onCheckedChange={setEnableLive}
               disabled={triage.isPending}
             />
-            <Label htmlFor="live-ti" className="mono-xs text-muted-foreground">
+            <Label htmlFor="live-ti" className="mono-xs text-muted-foreground cursor-pointer">
               Live threat intel enrichment
             </Label>
           </div>
@@ -91,38 +93,60 @@ export function AnalyzeWorkspace() {
         <Textarea
           value={alertText}
           onChange={(e) => setAlertText(e.target.value)}
-          rows={12}
+          rows={11}
           spellCheck={false}
           disabled={triage.isPending}
-          placeholder="Paste the complete security alert here…"
-          className="resize-y bg-panel font-mono text-[0.8125rem] leading-relaxed"
+          placeholder="Paste the complete security alert here..."
+          className="resize-y bg-panel font-mono text-[0.8125rem] leading-relaxed border-border/80"
         />
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Button onClick={analyze} disabled={triage.isPending} className="gap-1.5">
-            {triage.isPending ? (
-              <Loader2 className="size-4 animate-spin" aria-hidden />
-            ) : (
-              <Play className="size-4" aria-hidden />
-            )}
-            {triage.isPending ? "Analyzing…" : "Analyze Alert"}
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => {
-              setAlertText("");
-              setValidation(null);
-              triage.reset();
-            }}
-            disabled={triage.isPending}
-            className="gap-1.5"
-          >
-            <Eraser className="size-4" aria-hidden />
-            Clear
-          </Button>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              onClick={analyze}
+              disabled={triage.isPending}
+              className="gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+            >
+              {triage.isPending ? (
+                <Loader2 className="size-4 animate-spin" aria-hidden />
+              ) : (
+                <Play className="size-4" aria-hidden />
+              )}
+              {triage.isPending ? "Analyzing..." : "Analyze Alert"}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setAlertText("");
+                setValidation(null);
+                triage.reset();
+              }}
+              disabled={triage.isPending}
+              className="gap-1.5"
+            >
+              <Eraser className="size-4" aria-hidden />
+              Clear
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setAlertText(SAMPLE_ALERT);
+                setValidation(null);
+              }}
+              disabled={triage.isPending}
+              className="gap-1.5"
+            >
+              <FileText className="size-4" aria-hidden />
+              Sample Alert
+            </Button>
+          </div>
           <span className="mono-xs text-muted-foreground">
             {alertText.length.toLocaleString()} characters
           </span>
         </div>
+
+        <p className="mt-2 text-xs text-muted-foreground">
+          Load a sample security alert to test the triage workflow.
+        </p>
 
         {validation && (
           <p role="alert" className="mt-3 text-sm text-warn">
@@ -136,25 +160,7 @@ export function AnalyzeWorkspace() {
         )}
       </SectionCard>
 
-      <SectionCard title="Triage pipeline" subtitle="Executed end to end by the backend service.">
-        <ol className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-          {PIPELINE.map((step, i) => (
-            <li
-              key={step}
-              className="flex items-center gap-2 rounded-md border border-border bg-surface/50 px-3 py-2"
-            >
-              <span className="mono-xs w-4 text-muted-foreground">{i + 1}</span>
-              <span className="text-sm text-foreground/85">{step}</span>
-            </li>
-          ))}
-        </ol>
-        <p className="mt-3 text-xs text-muted-foreground">
-          {triage.isPending
-            ? "Analysis in progress on the backend. Step completion is not reported by the API, so no step is marked complete until the full report returns."
-            : "Stage-level progress is not reported by the API; the full report is returned on completion."}
-        </p>
-      </SectionCard>
-
+      {/* Incident Result Workspace */}
       {!active ? (
         <EmptyState
           message="Run an alert analysis to view results."
@@ -162,8 +168,10 @@ export function AnalyzeWorkspace() {
         />
       ) : (
         <div className="space-y-4">
+          {/* 5. Incident Result Header */}
           <SectionCard
             title="Incident Triage Result"
+            subtitle="AI-powered analysis with threat intelligence, MITRE ATT&CK mapping, and response guidance."
             actions={
               <div className="flex flex-wrap items-center gap-2">
                 <SeverityBadge
@@ -204,51 +212,61 @@ export function AnalyzeWorkspace() {
             )}
           </SectionCard>
 
-          <Tabs defaultValue="overview">
-            <TabsList className="flex h-auto w-full flex-wrap justify-start gap-1 bg-surface p-1">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="evidence">Evidence</TabsTrigger>
-              <TabsTrigger value="iocs">IOCs</TabsTrigger>
-              <TabsTrigger value="ti">Threat Intel</TabsTrigger>
-              <TabsTrigger value="mitre">MITRE</TabsTrigger>
-              <TabsTrigger value="playbooks">Playbooks</TabsTrigger>
-              <TabsTrigger value="cisa">CISA</TabsTrigger>
-              <TabsTrigger value="actions">Actions</TabsTrigger>
-              <TabsTrigger value="assistant">AI Assistant</TabsTrigger>
-              <TabsTrigger value="alert">Alert</TabsTrigger>
-            </TabsList>
+          {/* 6 & 12. Main Navigation + Persistent AI Assistant Grid */}
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-12 items-start">
+            {/* Center / Left: 5 Main Incident Tabs */}
+            <div className="lg:col-span-8 space-y-4 min-w-0">
+              <Tabs defaultValue="overview" className="w-full">
+                <TabsList className="grid w-full grid-cols-5 bg-surface border border-border p-1">
+                  <TabsTrigger value="overview" className="data-[state=active]:bg-panel data-[state=active]:text-primary font-medium text-xs">
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger value="evidence" className="data-[state=active]:bg-panel data-[state=active]:text-primary font-medium text-xs">
+                    Evidence
+                  </TabsTrigger>
+                  <TabsTrigger value="detection" className="data-[state=active]:bg-panel data-[state=active]:text-primary font-medium text-xs">
+                    Detection
+                  </TabsTrigger>
+                  <TabsTrigger value="response" className="data-[state=active]:bg-panel data-[state=active]:text-primary font-medium text-xs">
+                    Response
+                  </TabsTrigger>
+                  <TabsTrigger value="alert" className="data-[state=active]:bg-panel data-[state=active]:text-primary font-medium text-xs">
+                    Alert
+                  </TabsTrigger>
+                </TabsList>
 
-            <TabsContent value="overview" className="mt-4">
-              <OverviewPanel incident={active} />
-            </TabsContent>
-            <TabsContent value="evidence" className="mt-4">
-              <EvidencePanel incident={active} />
-            </TabsContent>
-            <TabsContent value="iocs" className="mt-4">
-              <IocPanel incident={active} />
-            </TabsContent>
-            <TabsContent value="ti" className="mt-4">
-              <ThreatIntelPanel incident={active} />
-            </TabsContent>
-            <TabsContent value="mitre" className="mt-4">
-              <MitrePanel incident={active} />
-            </TabsContent>
-            <TabsContent value="playbooks" className="mt-4">
-              <PlaybookPanel incident={active} />
-            </TabsContent>
-            <TabsContent value="cisa" className="mt-4">
-              <CisaPanel incident={active} />
-            </TabsContent>
-            <TabsContent value="actions" className="mt-4">
-              <ActionsPanel incident={active} />
-            </TabsContent>
-            <TabsContent value="assistant" className="mt-4">
+                {/* Tab 1: Overview */}
+                <TabsContent value="overview" className="mt-4 focus-visible:outline-none">
+                  <OverviewPanel incident={active} />
+                </TabsContent>
+
+                {/* Tab 2: Evidence */}
+                <TabsContent value="evidence" className="mt-4 focus-visible:outline-none">
+                  <EvidencePanel incident={active} />
+                </TabsContent>
+
+                {/* Tab 3: Detection */}
+                <TabsContent value="detection" className="mt-4 focus-visible:outline-none">
+                  <DetectionPanel incident={active} />
+                </TabsContent>
+
+                {/* Tab 4: Response */}
+                <TabsContent value="response" className="mt-4 focus-visible:outline-none">
+                  <ResponsePanel incident={active} />
+                </TabsContent>
+
+                {/* Tab 5: Alert */}
+                <TabsContent value="alert" className="mt-4 focus-visible:outline-none">
+                  <AlertSourcePanel incident={active} />
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {/* Right: Persistent AI Assistant Panel */}
+            <div className="lg:col-span-4 lg:sticky lg:top-16">
               <IncidentAssistant incident={active} />
-            </TabsContent>
-            <TabsContent value="alert" className="mt-4">
-              <AlertSourcePanel incident={active} />
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
         </div>
       )}
     </div>
